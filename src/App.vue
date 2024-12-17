@@ -43,24 +43,60 @@ function filterTask(type: Filter) {
 </script>
 
 <template>
-  <h1>{{ title }}</h1>
+  <div class="bg-base-100 flex justify-center">
+    <div class="text-center max-h-screen mt-10">
+      <div class="max-w-lg">
+        <h1 class="text-5xl font-bold mb-6">{{ title }}</h1>
 
-  <div v-if="tasks.length">
-    <p>
-      {{ tasksDone }} of {{ tasks.length }}
-      {{ tasks.length > 1 ? "tasks" : "task" }} completed
-    </p>
-    <div>
-      <button @click="() => filterTask('all')">all</button>
-      <button @click="() => filterTask('done')">done</button>
-      <button @click="() => filterTask('todo')">todo</button>
+        <TaskForm @add-task="(title) => addTask(title)" />
+
+        <div v-if="tasks.length" class="my-5 space-y-2">
+          <p class="badge badge-primary">
+            {{ tasksDone }} of {{ tasks.length }}
+            {{ tasks.length > 1 ? "tasks" : "task" }} completed
+          </p>
+          <div class="flex gap-3 items-center justify-center">
+            <button
+              @click="() => filterTask('all')"
+              class="badge badge-outline"
+            >
+              all
+            </button>
+            <button
+              @click="() => filterTask('done')"
+              class="badge badge-outline"
+            >
+              done
+            </button>
+            <button
+              @click="() => filterTask('todo')"
+              class="badge badge-outline"
+            >
+              todo
+            </button>
+          </div>
+        </div>
+        <div v-else role="alert" class="alert mt-5">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="stroke-info h-6 w-6 shrink-0"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          <p>Add a task to get started</p>
+        </div>
+        <TasksList
+          :tasks="filteredTasks"
+          @delete-task="(id) => deleteTask(id)"
+        />
+      </div>
     </div>
   </div>
-  <div v-else>
-    <p>Add a task to get started</p>
-  </div>
-  <TaskForm @add-task="(title) => addTask(title)" />
-  <TasksList :tasks="filteredTasks" @delete-task="(id) => deleteTask(id)" />
 </template>
-
-<style scoped></style>

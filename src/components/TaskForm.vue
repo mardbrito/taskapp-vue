@@ -13,11 +13,12 @@ function formSubmit() {
 </script>
 
 <template>
-  <form @submit.prevent="formSubmit">
-    <label>
-      Task
-      <input type="text" v-model="task" />
-    </label>
-    <button type="submit">Add</button>
+  <form @submit.prevent="formSubmit" class="max-w-lg">
+    <input
+      type="text"
+      v-model="task"
+      placeholder="Type your new task here"
+      class="input input-bordered w-full placeholder-gray-700"
+    />
   </form>
 </template>
