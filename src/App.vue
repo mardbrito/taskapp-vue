@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { Filter, Task } from "./types/types";
 
 import TaskForm from "./components/TaskForm.vue";
 import TasksList from "./components/TasksList.vue";
 
 const title = "Task App";
-
 const tasks = ref<Task[]>([]);
 const currentFilter = ref<Filter>("all");
 
@@ -40,6 +39,18 @@ function deleteTask(id: string) {
 function filterTask(type: Filter) {
   return (currentFilter.value = type);
 }
+
+watch(
+  tasks,
+  (newVal) => {
+    localStorage.setItem("taskapp", JSON.stringify(newVal));
+  },
+  { deep: true }
+);
+
+onMounted(() => {
+  tasks.value = JSON.parse(localStorage.getItem("taskapp") || "[]");
+});
 </script>
 
 <template>
@@ -60,19 +71,19 @@ function filterTask(type: Filter) {
               @click="() => filterTask('all')"
               class="badge badge-outline"
             >
-              all
+              All
             </button>
             <button
               @click="() => filterTask('done')"
               class="badge badge-outline"
             >
-              done
+              Done
             </button>
             <button
               @click="() => filterTask('todo')"
               class="badge badge-outline"
             >
-              todo
+              Todo
             </button>
           </div>
         </div>
